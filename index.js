@@ -1,52 +1,29 @@
-let express = require('express')
-let bodyParser = require('body-parser')
-let mongoose = require('mongoose')
+const express = require('express');
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+const apiRoutes = require('./api-routes');
 
+const app = express();
+const PORT = process.env.PORT || 8080;
 
-//Import router
-let api = require("./api")
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
+mongoose.connect('mongodb://localhost/netalmix_db', { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => {
+        console.log('MongoDB connected successfully');
+        app.listen(PORT, () => {
+            console.log(`Server is running on port ${PORT}`);
+        });
+    })
+    .catch(err => {
+        console.error('MongoDB connection error:', err);
+    });
 
-//Initilize app
-let app = express();
+app.get('/', (req, res) => {
+    res.send('NetAlmix API is working');
+});
 
+app.use('/api', apiRoutes);
 
-//configure bodyparser to handle post requests
-app.use(bodyParser.urlencoded({
-    extended: true
-}))
-app.use(bodyParser.json())
-
-
-//Connect to MongoDB
-mongoose.connect('mongodb://localhost/NetAlmix', {useNewUrlParser: true, useUnifiedTopology:true})
-var db = mongoose.connection;
-if(!db)
-{
-    console.log("ERROR connecting db")
-} else
-{
-    console.log("DB connected succesfully")
-}
-
-
-//SEtup  port
-var port = process.env.port || 8080
-
-
-//Default URL
-app.get('/', (req,res) => res.send('El mejor WS de la historia'))
-
-
-//Launch app
-app.listen(port, function()
-{
-    console.log("Running on port: " + port)
-})
-
-
-
-
-
-
-//app.use('/api', api)
+module.exports = app;
