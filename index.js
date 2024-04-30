@@ -16,17 +16,12 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 
 mongoose.connect('mongodb://localhost/NetAlmix', { useNewUrlParser: true, useUnifiedTopology: true });
-mongoose.connect('mongodb://localhost/NetAlmix', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-});
-
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'Error de conexión a MongoDB:'));
-db.once('open', () => {
-    console.log('¡Conexión exitosa a MongoDB!');
-});
-
+var db = mongoose.connection;
+if (!db) {
+    console.log("ERROR connecting db");
+} else {
+    console.log("DB connected successfully");
+}
 
 var port = process.env.port || 8080;
 
