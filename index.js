@@ -1,62 +1,45 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const controlador = require('./controlador');
+//Initilize app
+let app = express();
 
 
-const app = express();
-app.use(bodyParser.json());
+//configure bodyparser to handle post requests
+app.use(bodyParser.urlencoded({
+    extended: true
+}))
+app.use(bodyParser.json())
 
 
-app.post('/contenido', (req, res) => {
-    const nuevoContenido = req.body;
-    controlador.agregarContenido(nuevoContenido);
-    res.status(201).send('Contenido agregado correctamente.');
-});
+//Connect to MongoDB
+mongoose.connect('mongodb://localhost/NetAlmix', {useNewUrlParser: true, useUnifiedTopology:true})
+var db = mongoose.connection;
+if(!db)
+{
+    console.log("ERROR connecting db")
+} else
+{
+    console.log("DB connected succesfully")
+}
 
 
-app.delete('/contenido/:id', (req, res) => {
-    const id = req.params.id;
-    controlador.eliminarContenido(id);
-    res.send('Contenido eliminado correctamente.');
-});
+//SEtup  port
+var port = process.env.port || 8080
 
 
-app.put('/contenido/:id', (req, res) => {
-    const id = req.params.id;
-    const contenidoActualizado = req.body;
-    controlador.actualizarContenido(id, contenidoActualizado);
-    res.send('Contenido modificado correctamente.');
-});
+//Default URL
+app.get('/', (req,res) => res.send('El mejor WS de la historia'))
 
 
-app.get('/series', (req, res) => {
-    const series = controlador.obtenerSeries();
-    res.json(series);
-});
+//Launch app
+app.listen(port, function()
+{
+    console.log("Running on port: " + port)
+})
 
 
-app.get('/peliculas', (req, res) => {
-    const peliculas = controlador.obtenerPeliculas();
-    res.json(peliculas);
-});
 
 
-app.get('/contenido/:genero', (req, res) => {
-    const genero = req.params.genero.toLowerCase();
-    const resultados = controlador.obtenerContenidoPorGenero(genero);
-    res.json(resultados);
-});
 
 
-app.get('/top10/:tipo', (req, res) => {
-    const tipo = req.params.tipo.toLowerCase();
-    const top10 = controlador.obtenerTop10(tipo);
-    res.json(top10);
-});
-
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Servidor corriendo en el puerto ${PORT}`));
-
+//app.use('/api', apiRoutes)
 
 

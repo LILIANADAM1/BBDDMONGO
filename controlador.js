@@ -1,67 +1,62 @@
-let { Contenido, Pelicula, Serie } = require('./modelo');
+const express = require('express');
+const bodyParser = require('body-parser');
+const controlador = require('./controlador');
 
 
-let database = [];
+const app = express();
+app.use(bodyParser.json());
 
 
-function agregarContenido(contenido) {
-    database.push(contenido);
-}
+app.post('/contenido', (req, res) => {
+    const nuevoContenido = req.body;
+    controlador.agregarContenido(nuevoContenido);
+    res.status(201).send('Contenido agregado correctamente.');
+});
 
 
-function eliminarContenido(id) {
-    database = database.filter(contenido => contenido.id !== id);
-}
+app.delete('/contenido/:id', (req, res) => {
+    const id = req.params.id;
+    controlador.eliminarContenido(id);
+    res.send('Contenido eliminado correctamente.');
+});
 
 
-function actualizarContenido(id, contenidoActualizado) {
-    database = database.map(contenido => {
-        if (contenido.id === id) {
-            return { ...contenido, ...contenidoActualizado };
-        }
-        return contenido;
-    });
-}
+app.put('/contenido/:id', (req, res) => {
+    const id = req.params.id;
+    const contenidoActualizado = req.body;
+    controlador.actualizarContenido(id, contenidoActualizado);
+    res.send('Contenido modificado correctamente.');
+});
 
 
-function obtenerSeries() {
-    return database.filter(contenido => contenido.tipo === 'serie');
-}
+app.get('/series', (req, res) => {
+    const series = controlador.obtenerSeries();
+    res.json(series);
+});
 
 
-function obtenerPeliculas() {
-    return database.filter(contenido => contenido.tipo === 'pelicula');
-}
+app.get('/peliculas', (req, res) => {
+    const peliculas = controlador.obtenerPeliculas();
+    res.json(peliculas);
+});
 
 
-function obtenerContenidoPorGenero(genero) {
-    return database.filter(contenido => contenido.generos.includes(genero.toLowerCase()));
-}
+app.get('/contenido/:genero', (req, res) => {
+    const genero = req.params.genero.toLowerCase();
+    const resultados = controlador.obtenerContenidoPorGenero(genero);
+    res.json(resultados);
+});
 
 
-function obtenerTop10(tipo) {
-    return database
-        .filter(contenido => contenido.tipo === tipo.toLowerCase())
-        .sort((a, b) => calcularPuntuacionMedia(b) - calcularPuntuacionMedia(a))
-        .slice(0, 10);
-}
+app.get('/top10/:tipo', (req, res) => {
+    const tipo = req.params.tipo.toLowerCase();
+    const top10 = controlador.obtenerTop10(tipo);
+    res.json(top10);
+});
 
 
-function calcularPuntuacionMedia(contenido) {
-    if (contenido.valoraciones.length === 0) return 0;
-    const totalPuntuacion = contenido.valoraciones.reduce((acc, cur) => acc + cur.puntuacion, 0);
-    return totalPuntuacion / contenido.valoraciones.length;
-}
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Servidor corriendo en el puerto ${PORT}`));
 
-
-module.exports = {
-    agregarContenido,
-    eliminarContenido,
-    actualizarContenido,
-    obtenerSeries,
-    obtenerPeliculas,
-    obtenerContenidoPorGenero,
-    obtenerTop10
-};
 
 
