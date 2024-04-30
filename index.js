@@ -1,62 +1,58 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const controlador = require('./controlador');
 
 
-const app = express();
-app.use(bodyParser.json());
+//Filename: index.js
 
 
-app.post('/contenido', (req, res) => {
-    const nuevoContenido = req.body;
-    controlador.agregarContenido(nuevoContenido);
-    res.status(201).send('Contenido agregado correctamente.');
-});
+//Import express
+let express = require('express')
+let bodyParser = require('body-parser')
+let mongoose = require('mongoose')
 
 
-app.delete('/contenido/:id', (req, res) => {
-    const id = req.params.id;
-    controlador.eliminarContenido(id);
-    res.send('Contenido eliminado correctamente.');
-});
+//Import router
+let api = require("./api")
 
 
-app.put('/contenido/:id', (req, res) => {
-    const id = req.params.id;
-    const contenidoActualizado = req.body;
-    controlador.actualizarContenido(id, contenidoActualizado);
-    res.send('Contenido modificado correctamente.');
-});
+//Initilize app
+let app = express();
 
 
-app.get('/series', (req, res) => {
-    const series = controlador.obtenerSeries();
-    res.json(series);
-});
+//configure bodyparser to handle post requests
+app.use(bodyParser.urlencoded({
+    extended: true
+}))
+app.use(bodyParser.json())
 
 
-app.get('/peliculas', (req, res) => {
-    const peliculas = controlador.obtenerPeliculas();
-    res.json(peliculas);
-});
+//Connect to MongoDB
+mongoose.connect('mongodb://localhost/NetAlmix', {useNewUrlParser: true, useUnifiedTopology:true})
+var db = mongoose.connection;
+if(!db)
+{
+    console.log("ERROR connecting db")
+} else
+{
+    console.log("DB connected succesfully")
+}
 
 
-app.get('/contenido/:genero', (req, res) => {
-    const genero = req.params.genero.toLowerCase();
-    const resultados = controlador.obtenerContenidoPorGenero(genero);
-    res.json(resultados);
-});
+//SEtup  port
+var port = process.env.port || 8080
 
 
-app.get('/top10/:tipo', (req, res) => {
-    const tipo = req.params.tipo.toLowerCase();
-    const top10 = controlador.obtenerTop10(tipo);
-    res.json(top10);
-});
+//Default URL
+app.get('/', (req,res) => res.send('El mejor WS de la historia'))
 
 
-const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => console.log(`Servidor corriendo en el puerto ${PORT}`));
+//Launch app
+app.listen(port, function()
+{
+    console.log("Running on port: " + port)
+})
 
 
 
+
+
+
+//app.use('/api', apiRoutes)
