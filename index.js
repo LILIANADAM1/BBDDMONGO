@@ -35,7 +35,7 @@ var port = process.env.port || 8080
 
 
 //Default URL
-app.get('/', (req,res) => res.send('El mejor WS de la historia'))
+app.get('/', (req,res) => res.send('La mejor serie del mundo es Breaking Bad'))
 
 
 //Launch app
@@ -49,4 +49,4 @@ app.listen(port, function()
 
 
 
-//app.use('/api', apiRoutes)
+app.use('/api', apiRoutes)
