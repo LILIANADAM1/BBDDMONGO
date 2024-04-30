@@ -49,4 +49,4 @@ app.listen(port, function()
 
 
 
-app.use('/api', apiRoutes)
+//app.use('/api', apiRoutes)
