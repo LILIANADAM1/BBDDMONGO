@@ -19,7 +19,7 @@ app.use(bodyParser.json())
 
 
 //Connect to MongoDB
-mongoose.connect('mongodb://localhost/juegAlmi', {useNewUrlParser: true, useUnifiedTopology:true})
+mongoose.connect('mongodb://localhost/NetAlmix', {useNewUrlParser: true, useUnifiedTopology:true})
 var db = mongoose.connection;
 if(!db)
 {
