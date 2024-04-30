@@ -1,52 +1,62 @@
-let express = require('express')
-let bodyParser = require('body-parser')
-let mongoose = require('mongoose')
+const express = require('express');
+const bodyParser = require('body-parser');
+const controlador = require('./controlador');
 
 
-//Import router
-let apiRoutes = require("./api-routes")
+const app = express();
+app.use(bodyParser.json());
 
 
-//Initilize app
-let app = express();
+app.post('/contenido', (req, res) => {
+    const nuevoContenido = req.body;
+    controlador.agregarContenido(nuevoContenido);
+    res.status(201).send('Contenido agregado correctamente.');
+});
 
 
-//configure bodyparser to handle post requests
-app.use(bodyParser.urlencoded({
-    extended: true
-}))
-app.use(bodyParser.json())
+app.delete('/contenido/:id', (req, res) => {
+    const id = req.params.id;
+    controlador.eliminarContenido(id);
+    res.send('Contenido eliminado correctamente.');
+});
 
 
-//Connect to MongoDB
-mongoose.connect('mongodb://localhost/NetAlmix', {useNewUrlParser: true, useUnifiedTopology:true})
-var db = mongoose.connection;
-if(!db)
-{
-    console.log("ERROR connecting db")
-} else
-{
-    console.log("DB connected succesfully")
-}
+app.put('/contenido/:id', (req, res) => {
+    const id = req.params.id;
+    const contenidoActualizado = req.body;
+    controlador.actualizarContenido(id, contenidoActualizado);
+    res.send('Contenido modificado correctamente.');
+});
 
 
-//SEtup  port
-var port = process.env.port || 8080
+app.get('/series', (req, res) => {
+    const series = controlador.obtenerSeries();
+    res.json(series);
+});
 
 
-//Default URL
-app.get('/', (req,res) => res.send('La mejor serie del mundo es Breaking Bad'))
+app.get('/peliculas', (req, res) => {
+    const peliculas = controlador.obtenerPeliculas();
+    res.json(peliculas);
+});
 
 
-//Launch app
-app.listen(port, function()
-{
-    console.log("Running on port: " + port)
-})
+app.get('/contenido/:genero', (req, res) => {
+    const genero = req.params.genero.toLowerCase();
+    const resultados = controlador.obtenerContenidoPorGenero(genero);
+    res.json(resultados);
+});
+
+
+app.get('/top10/:tipo', (req, res) => {
+    const tipo = req.params.tipo.toLowerCase();
+    const top10 = controlador.obtenerTop10(tipo);
+    res.json(top10);
+});
+
+
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => console.log(`Servidor corriendo en el puerto ${PORT}`));
 
 
 
-
-
-
-//app.use('/api', apiRoutes)
