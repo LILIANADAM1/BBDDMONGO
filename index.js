@@ -4,7 +4,7 @@ let mongoose = require('mongoose')
 
 
 //Import router
-let apiRoutes = require("./api-routes")
+let api = require("./api")
 
 
 //Initilize app
