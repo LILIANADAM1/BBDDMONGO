@@ -1,91 +1,43 @@
-const Content = require('./contentModel');
+const Contenido = require('./modelo');
 
-// Obtener todas las películas
-exports.getAllMovies = async (req, res) => {
-    try {
-        const movies = await Content.find({ contentType: 'pelicula' });
-        res.json(movies);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-};
+exports.agregarContenido = function(req, res) {
+    const nuevoContenido = new Contenido({
+        titulo: req.body.titulo,
+        tipo: req.body.tipo,
+        descripcion: req.body.descripcion,
+        valoraciones: req.body.valoraciones || [],
+        generos: req.body.generos || [],
+        numero_reproducciones: req.body.numero_reproducciones || 0,
+        premios: req.body.premios || [],
+        duracion: req.body.duracion,
+        director: req.body.director,
+        temporadas: req.body.temporadas || []
+    });
 
-// Obtener todas las series
-exports.getAllSeries = async (req, res) => {
-    try {
-        const series = await Content.find({ contentType: 'serie' });
-        res.json(series);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-};
-
-// Obtener películas/series por género
-exports.getByGenre = async (req, res) => {
-    const genre = req.params.genre;
-    try {
-        const contents = await Content.find({ genres: genre });
-        res.json(contents);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-};
-
-// Obtener el top 10 de películas/series por puntuación media
-exports.getTop10ByRating = async (req, res) => {
-    const contentType = req.params.contentType;
-    try {
-        const topContents = await Content.aggregate([
-            { $match: { contentType } },
-            { $unwind: '$ratings' },
-            {
-                $group: {
-                    _id: '$_id',
-                    averageRating: { $avg: '$ratings.score' }
-                }
-            },
-            { $sort: { averageRating: -1 } },
-            { $limit: 10 }
-        ]);
-        res.json(topContents);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-};
-
-// Crear una nueva película
-exports.createMovie = async (req, res) => {
-    const { title, description, genres, duration, director } = req.body;
-    try {
-        const newMovie = new Content({
-            title,
-            contentType: 'pelicula',
-            description,
-            genres,
-            duration,
-            director
+    nuevoContenido.save()
+        .then(() => {
+            res.json({
+                message: 'Contenido creado',
+                data: nuevoContenido
+            });
+        })
+        .catch(err => {
+            res.status(500).send(err);
         });
-        const savedMovie = await newMovie.save();
-        res.status(201).json(savedMovie);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
 };
 
-// Crear una nueva serie
-exports.createSeries = async (req, res) => {
-    const { title, description, genres, seasons } = req.body;
-    try {
-        const newSeries = new Content({
-            title,
-            contentType: 'serie',
-            description,
-            genres,
-            seasons
+exports.verContenido = (req, res) => {
+    Contenido.find()
+        .then(contenidos => {
+            res.json({
+                status: "success",
+                message: "Contenidos retrieved successfully",
+                data: contenidos
+            });
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: err.message || "Some error occurred while retrieving contenidos."
+            });
         });
-        const savedSeries = await newSeries.save();
-        res.status(201).json(savedSeries);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
 };

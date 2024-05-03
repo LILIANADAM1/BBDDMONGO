@@ -1,78 +1,80 @@
 const mongoose = require('mongoose');
 
-// Schema para valoraciones
-const RatingSchema = new mongoose.Schema({
-    nick: String,
-    score: {
-        type: Number,
-        min: 1,
-        max: 10
+const ContenidoSchema = new mongoose.Schema({
+    titulo: {
+        type: String,
+        required: true,
+        trim: true,
+        maxlength: 100
     },
-    comment: String
-});
-
-// Schema para episodios de series
-const EpisodeSchema = new mongoose.Schema({
-    title: {
+    tipo: {
+        type: String,
+        enum: ['pelicula', 'serie'],
+        required: true
+    },
+    descripcion: {
         type: String,
         required: true
     },
-    duration: {
-        type: Number,
+    valoraciones: [{
+        nick: {
+            type: String,
+            required: true,
+            trim: true
+        },
+        puntuacion: {
+            type: Number,
+            required: true,
+            min: 0,
+            max: 10
+        },
+        comentario: {
+            type: String,
+            trim: true
+        }
+    }],
+    generos: {
+        type: [String],
         required: true
     },
-    description: {
-        type: String,
-        required: true
-    }
-});
-
-// Schema principal para contenido (películas y series)
-const ContentSchema = new mongoose.Schema({
-    title: {
-        type: String,
-        required: true
-    },
-    contentType: {
-        type: String,
-        enum: ['serie', 'pelicula'],
-        required: true
-    },
-    description: {
-        type: String,
-        required: true
-    },
-    ratings: [RatingSchema], // Array de valoraciones
-    genres: [String],
-    views: {
+    numero_reproducciones: {
         type: Number,
         default: 0
     },
-    awards: [String],
-    // Campos específicos para películas
-    duration: {
+    premios: {
+        type: [String]
+    },
+    duracion: {
         type: Number,
-        required: function() {
-            return this.contentType === 'pelicula'; // Requerido solo para películas
-        }
+        min: 1 // Duración mínima de 1 minuto
     },
     director: {
         type: String,
-        required: function() {
-            return this.contentType === 'pelicula'; // Requerido solo para películas
-        }
+        trim: true
     },
-    // Campos específicos para series
-    seasons: [{
-        title: {
-            type: String,
-            required: true
+    temporadas: [{
+        numero: {
+            type: Number,
+            required: true,
+            min: 1
         },
-        episodes: [EpisodeSchema] // Array de episodios por temporada
+        capitulos: [{
+            titulo: {
+                type: String,
+                required: true,
+                trim: true
+            },
+            duracion: {
+                type: Number,
+                required: true,
+                min: 1 // Duración mínima de 1 minuto
+            },
+            descripcion: {
+                type: String,
+                required: true
+            }
+        }]
     }]
-});
+}, { collection: 'Contenido' });
 
-// Crear modelo 'Content' basado en el schema ContentSchema
-const Content = mongoose.model('Content', ContentSchema);
-
-module.exports = Content;
+module.exports = mongoose.model('Contenido', ContenidoSchema);

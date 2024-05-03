@@ -1,15 +1,17 @@
 const express = require('express');
+const contentController = require('./controlador');
+
 const router = express.Router();
 
-const contentController = require('./contentController');
+router.get('/api', (_, res) => {
+    res.json({
+        status: 'API funcionando',
+        message: '¡Bienvenido al mejor WS del mundo!'
+    });
+});
 
-// Rutas para películas y series
-router.get('/movies', contentController.getAllMovies);
-router.get('/series', contentController.getAllSeries);
-router.get('/genre/:genre', contentController.getByGenre);
-router.get('/top10/:contentType', contentController.getTop10ByRating);
+router.post('/agregarContenido', contentController.agregarContenido);
+router.get('/verContenido', contentController.verContenido);
 
-router.post('/movies', contentController.createMovie);
-router.post('/serie', contentController.createSeries);
 
 module.exports = router;
