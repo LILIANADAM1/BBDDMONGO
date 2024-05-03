@@ -9,7 +9,7 @@ router.get('/series', contentController.getAllSeries);
 router.get('/genre/:genre', contentController.getByGenre);
 router.get('/top10/:contentType', contentController.getTop10ByRating);
 
-router.post('/movies', contentController.createMovie);
-router.post('/series', contentController.createSeries);
+router.post('/movies', contentController.createMovies);
+router.post('/serie', contentController.createSeries);
 
 module.exports = router;
