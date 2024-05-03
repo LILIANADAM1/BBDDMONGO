@@ -1,26 +1,27 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
-
-const apiRoutes = require('./api-routes');
-
 const app = express();
-const port = process.env.PORT || 8080;
+const port = 8080;
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-
-mongoose.connect('mongodb://localhost/netalmix', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
+// Conectar a MongoDB
+mongoose.connect('mongodb://localhost/NetAlmix', {
+  useNewUrlParser: true,  // Ya no es necesario en versiones recientes
+  useUnifiedTopology: true  // Ya no es necesario en versiones recientes
 });
 
+// Verificar la conexión
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'Error de conexión a MongoDB:'));
+db.once('open', () => {
+  console.log('Conectado a MongoDB');
+});
+
+// Configurar rutas y middleware
 app.get('/', (req, res) => {
-    res.send('¡Bienvenido a NetAlmix API!');
+  res.send('Servidor Node.js funcionando correctamente');
 });
 
-app.use('/api', apiRoutes);
-
+// Iniciar el servidor
 app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
+  console.log(`Servidor corriendo en http://localhost:${port}`);
 });
