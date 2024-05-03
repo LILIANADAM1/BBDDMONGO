@@ -16,6 +16,10 @@ db.once('open', () => {
   console.log('Conectado a MongoDB');
 });
 
+app.get('/movies', (req, res) => {
+    // Aquí deberías escribir el código para obtener y devolver las películas
+    res.send('Aquí están todas las películas');
+});
 // Configurar rutas y middleware
 app.get('/', (req, res) => {
   res.send('Servidor Node.js funcionando correctamente');
