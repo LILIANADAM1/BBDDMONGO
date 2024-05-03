@@ -10,8 +10,8 @@ const nuevoDocumental = new Contenido({
     director: 'Director del Documental',
     expertos: [
         {
-            nombre: 'Experto1',
-            apellido: 'ApellidoExperto1',
+            nombre: 'Arnol ',
+            apellido: 'Scharzenegger',
             cargo: 'CargoExperto1'
         },
         {
