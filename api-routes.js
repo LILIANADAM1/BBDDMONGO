@@ -1,9 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const documentalController = require('../documentalController');
 
-// Rutas para los documentales
-router.get('/', documentalController.getAllDocumentales);
-router.post('/', documentalController.createDocumental);
+const contentController = require('./contentController');
+
+// Rutas para películas y series
+router.get('/documental', contentController.getAllDocumental);
+router.get('/movies', contentController.getAllMovies);
+router.get('/series', contentController.getAllSeries);
+router.get('/genre/:genre', contentController.getByGenre);
+router.get('/top10/:contentType', contentController.getTop10ByRating);
+
+router.post('/movies', contentController.createMovie);
+router.post('/serie', contentController.createSeries);
+router.post('/documental', contentController.createDocumental);
 
 module.exports = router;
