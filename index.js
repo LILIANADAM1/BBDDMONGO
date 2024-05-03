@@ -15,7 +15,7 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 
-mongoose.connect('mongodb://localhost/netalmix', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect('mongodb://localhost/NetAlmix', { useNewUrlParser: true, useUnifiedTopology: true });
 var db = mongoose.connection;
 if (!db) {
     console.log("ERROR connecting db");
