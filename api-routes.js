@@ -10,6 +10,6 @@ router.get('/genre/:genre', contentController.getByGenre);
 router.get('/top10/:contentType', contentController.getTop10ByRating);
 
 router.post('/movies', contentController.createMovie);
-router.post('/series', contentController.createMovie);
+router.post('/series', contentController.createSeries);
 
 module.exports = router;
