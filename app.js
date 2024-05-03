@@ -1,23 +1,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
-const documentalRoutes = require('./routes/documentales');
-
+const db = require('./db');
+const documentalRoutes = require('./documentales');
 
 const app = express();
-const port = 8080;
+const PORT = process.env.PORT || 3000;
 
-mongoose.connect('mongodb://localhost/NetAlmix', {
-  useNewUrlParser: true,  
-  useUnifiedTopology: true  
-});
-
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'Error de conexión a MongoDB:'));
-db.once('open', () => {
-  console.log('Conectado a MongoDB');
-});
-
+app.use(bodyParser.json());
 app.use('/documentales', documentalRoutes);
 
 db.on('error', console.error.bind(console, 'Error de conexión a MongoDB:'));

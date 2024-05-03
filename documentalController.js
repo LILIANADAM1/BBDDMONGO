@@ -11,7 +11,7 @@ const documentalController = {
     },
 
     createDocumental: async (req, res) => {
-        const { duracion, director, elenco } = req.body;
+        const { duracion, director, experto } = req.body;
 
         try {
             const nuevoDocumental = new Documental({
