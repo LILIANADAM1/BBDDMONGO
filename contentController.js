@@ -1,30 +1,34 @@
-const Contenido = require('./modelo');
+const Contenido = require('./Contenido');
 
-exports.agregarContenido = function(req, res) {
-    const nuevoContenido = new Contenido({
-        titulo: req.body.titulo,
-        tipo: req.body.tipo,
-        descripcion: req.body.descripcion,
-        valoraciones: req.body.valoraciones || [],
-        generos: req.body.generos || [],
-        numero_reproducciones: req.body.numero_reproducciones || 0,
-        premios: req.body.premios || [],
-        duracion: req.body.duracion,
-        director: req.body.director,
-        temporadas: req.body.temporadas || []
+const nuevoDocumental = new Contenido({
+    titulo: 'Título del Documental',
+    tipo: 'documental',
+    descripcion: 'Descripción del Documental',
+    valoraciones: [],
+    generos: ['Documental', 'Historia'],
+    duracion: 120,
+    director: 'Director del Documental',
+    expertos: [
+        {
+            nombre: 'Experto1',
+            apellido: 'ApellidoExperto1',
+            cargo: 'CargoExperto1'
+        },
+        {
+            nombre: 'Experto2',
+            apellido: 'ApellidoExperto2',
+            cargo: 'CargoExperto2'
+        }
+    ]
+});
+
+nuevoDocumental.save()
+    .then(() => {
+        console.log('Documental guardado correctamente');
+    })
+    .catch((error) => {
+        console.error('Error al guardar el documental:', error);
     });
-
-    nuevoContenido.save()
-        .then(() => {
-            res.json({
-                message: 'Contenido creado',
-                data: nuevoContenido
-            });
-        })
-        .catch(err => {
-            res.status(500).send(err);
-        });
-};
 
 exports.verContenido = (req, res) => {
     Contenido.find()

@@ -9,7 +9,7 @@ const ContenidoSchema = new mongoose.Schema({
     },
     tipo: {
         type: String,
-        enum: ['pelicula', 'serie'],
+        enum: ['pelicula', 'serie', 'documental'], // Añadimos 'documental' al tipo
         required: true
     },
     descripcion: {
@@ -74,6 +74,23 @@ const ContenidoSchema = new mongoose.Schema({
                 required: true
             }
         }]
+    }],
+    expertos: [{
+        nombre: {
+            type: String,
+            required: true,
+            trim: true
+        },
+        apellido: {
+            type: String,
+            required: true,
+            trim: true
+        },
+        cargo: {
+            type: String,
+            required: true,
+            trim: true
+        }
     }]
 }, { collection: 'Contenido' });
 
