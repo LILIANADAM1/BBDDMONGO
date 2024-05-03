@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const documentalController = require('../documentalController');
+const documentalController = require('../BBDDMONGO/documentalController');
 
 // Rutas para los documentales
 router.get('/', documentalController.getAllDocumentales);
