@@ -18,7 +18,6 @@ db.once('open', () => {
   console.log('Conectado a MongoDB');
 });
 
-app.use(bodyParser.json());
 app.use('/documentales', documentalRoutes);
 
 db.on('error', console.error.bind(console, 'Error de conexión a MongoDB:'));
