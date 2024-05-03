@@ -52,3 +52,40 @@ exports.getTop10ByRating = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+// Crear una nueva película
+exports.createMovie = async (req, res) => {
+    const { title, description, genres, duration, director } = req.body;
+    try {
+        const newMovie = new Content({
+            title,
+            contentType: 'pelicula',
+            description,
+            genres,
+            duration,
+            director
+        });
+        const savedMovie = await newMovie.save();
+        res.status(201).json(savedMovie);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// Crear una nueva serie
+exports.createSeries = async (req, res) => {
+    const { title, description, genres, seasons } = req.body;
+    try {
+        const newSeries = new Content({
+            title,
+            contentType: 'serie',
+            description,
+            genres,
+            seasons
+        });
+        const savedSeries = await newSeries.save();
+        res.status(201).json(savedSeries);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};

@@ -1,7 +1,34 @@
 const mongoose = require('mongoose');
 
-// Schema para contenido (películas y series)
-const contentSchema = new mongoose.Schema({
+// Schema para valoraciones
+const RatingSchema = new mongoose.Schema({
+    nick: String,
+    score: {
+        type: Number,
+        min: 1,
+        max: 10
+    },
+    comment: String
+});
+
+// Schema para episodios de series
+const EpisodeSchema = new mongoose.Schema({
+    title: {
+        type: String,
+        required: true
+    },
+    duration: {
+        type: Number,
+        required: true
+    },
+    description: {
+        type: String,
+        required: true
+    }
+});
+
+// Schema principal para contenido (películas y series)
+const ContentSchema = new mongoose.Schema({
     title: {
         type: String,
         required: true
@@ -15,29 +42,37 @@ const contentSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    ratings: [{
-        nick: String,
-        score: Number,
-        comment: String
-    }],
+    ratings: [RatingSchema], // Array de valoraciones
     genres: [String],
     views: {
         type: Number,
         default: 0
     },
     awards: [String],
-    // Película específica
-    duration: Number,
-    director: String,
-    // Serie específica
+    // Campos específicos para películas
+    duration: {
+        type: Number,
+        required: function() {
+            return this.contentType === 'pelicula'; // Requerido solo para películas
+        }
+    },
+    director: {
+        type: String,
+        required: function() {
+            return this.contentType === 'pelicula'; // Requerido solo para películas
+        }
+    },
+    // Campos específicos para series
     seasons: [{
-        title: String,
-        episodes: [{
-            title: String,
-            duration: Number,
-            description: String
-        }]
+        title: {
+            type: String,
+            required: true
+        },
+        episodes: [EpisodeSchema] // Array de episodios por temporada
     }]
 });
 
-module.exports = mongoose.model('Content', contentSchema);
+// Crear modelo 'Content' basado en el schema ContentSchema
+const Content = mongoose.model('Content', ContentSchema);
+
+module.exports = Content;
