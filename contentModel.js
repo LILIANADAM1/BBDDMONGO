@@ -9,7 +9,7 @@ const ContenidoSchema = new mongoose.Schema({
     },
     tipo: {
         type: String,
-        enum: ['pelicula', 'serie', 'documental'], // Añadimos 'documental' al tipo
+        enum: ['pelicula', 'serie', 'documental'], 
         required: true
     },
     descripcion: {

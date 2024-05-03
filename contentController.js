@@ -1,4 +1,4 @@
-const Contenido = require('./Contenido');
+const Contenido = require('/ContentModel');
 
 const nuevoDocumental = new Contenido({
     titulo: 'Título del Documental',
