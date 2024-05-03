@@ -5,7 +5,7 @@ const contentController = require('./contentController');
 
 // Rutas para películas y series
 router.get('/NetAlmix/documental', contentController.getAllDocumental);
-router.get('/movies', contentController.getAllMovies);
+router.get('/NetAlmix/movies', contentController.getAllMovies);
 router.get('/series', contentController.getAllSeries);
 router.get('/genre/:genre', contentController.getByGenre);
 router.get('/top10/:contentType', contentController.getTop10ByRating);
