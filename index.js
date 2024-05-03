@@ -1,7 +1,9 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-
 const mongoose = require('mongoose');
+const documentalRoutes = require('./routes/documentales');
+
+
 const app = express();
 const port = 8080;
 
