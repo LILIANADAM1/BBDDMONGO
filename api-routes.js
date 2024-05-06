@@ -1,16 +1,16 @@
 const express = require('express');
 const router = express.Router();
+const contentController = require('./controller');
 
-const contentController = require('./contentController');
+// Rutas para operaciones CRUD
+router.post('/content', contentController.createContent);
+router.delete('/content/:id', contentController.deleteContent);
+router.put('/content/:id', contentController.updateContent);
 
-router.get('/documental', contentController.getAllDocumental);
-router.get('/movies', contentController.getAllMovies);
+// Consultas específicas
 router.get('/series', contentController.getAllSeries);
-router.get('/genre/:genre', contentController.getByGenre);
-router.get('/top10/:contentType', contentController.getTop10ByRating);
-
-router.post('/movies', contentController.createMovie);
-router.post('/serie', contentController.createSeries);
-router.post('/documental', contentController.createDocumental);
+router.get('/movies', contentController.getAllMovies);
+router.get('/content/genre/:genre', contentController.getContentByGenre);
+router.get('/top10/:type', contentController.getTop10ByRating);
 
 module.exports = router;
