@@ -13,4 +13,6 @@ router.get('/movies', contentController.getAllMovies);
 router.get('/content/genre/:genre', contentController.getContentByGenre);
 router.get('/top10/:type', contentController.getTop10ByRating);
 
+
 module.exports = router;
+
