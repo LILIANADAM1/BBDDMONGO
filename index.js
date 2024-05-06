@@ -17,6 +17,7 @@ db.once('open', () => {
   console.log('Conectado a MongoDB');
 });
 
+
 app.use('/api', apiRoutes);
 
 app.get('/', (req, res) => {
