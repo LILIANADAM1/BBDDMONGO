@@ -18,7 +18,7 @@ db.once('open', () => {
 });
 
 
-app.use('/api', apiRoutes);
+
 
 app.get('/', (req, res) => {
   res.send('Servidor Node.js funcionando correctamente');
