@@ -1,30 +1,44 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const app = express();
-const apiRoutes = require('./api-routes');
-const port = 8080;
+//Filename: index.js
 
+//Import express
+let express = require('express')
+let bodyParser = require ('body-parser')
+let mongoose = require('mongoose')
 
-const { MongoClient } = require('mongodb');
+//Import router 
+let apiRoutes = require("./api-routes")
 
-mongoose.connect('mongodb://localhost/NetAlmix', {
-  useNewUrlParser: true,  
-  useUnifiedTopology: true  
+//Initile app 
+let app = express();
+
+//configure bodyparser to handle post requests, //traducccion al json 
+app.use(bodyParser.urlencoded({
+    extended: true
+}))
+app.use(bodyParser.json())
+
+//Connect to MongoDB
+mongoose.connect('mongodb://localhost/NetAlmix', {useNewUrlParser: true, useUnifiedTopology: true}) 
+
+var db = mongoose.connection;
+if(!db)
+{
+    console.log("ERROR connecting db")
+
+}else
+{
+    console.log("DB connected succesfully")
+}
+//setup port 
+var port = process.env.port || 8080
+
+//Default URL 
+app.get('/', (req,res) => res.send('El mejor proyecto BBDD mongo de la historia'))
+
+//Launch app 
+app.listen(port, function()
+{
+    console.log("Running on port: " + port)
 });
 
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'Error de conexión a MongoDB:'));
-db.once('open', () => {
-  console.log('Conectado a MongoDB');
-});
-
-
-
-
-app.get('/', (req, res) => {
-  res.send('Servidor Node.js funcionando correctamente');
-});
-
-app.listen(port, () => {
-  console.log(`Servidor corriendo en http://localhost:${port}/`);
-});
+app.use('/api', apiRoutes)
