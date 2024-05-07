@@ -22,30 +22,55 @@ exports.index = function(req,res)
     });
 }
 
-//INSERTS
-exports.new = function (req, res)
-{
-    //aqui hay que ser escurpulosos con las mayusculas y los caracteres
-    var contenidos = new Contenidos();
-    //console.log(contenidos);
-    contenidos.Titulo = req.body.Titulo;
-    contenidos.TipoContenido = req.body.TipoContenido;
-    contenidos.Descripcion = req.body.Descripcion; 
-    contenidos.Valoraciones = req.body.Valoraciones;
-    contenidos.Generos = req.body.Generos; 
-    contenidos.NumeroReproducciones = req.body.NumeroReproducciones;
-    contenidos.Premios = req.body.Premios;
-    contenidos.Pelicula = req.body.Pelicula;
-    contenidos.Serie = req.body.Serie;
-
-    contenidos.save().then(function(men)
-    {
-        res.json({
-            message: "Nuevo contenido añadido",
-            data: men
-        })
+// INSERTS
+exports.new = function (req, res) {
+    // Crear una nueva instancia de Contenidos con los datos del cuerpo de la solicitud
+    var contenidos = new Contenidos({
+        Titulo: req.body.Titulo,
+        TipoContenido: req.body.TipoContenido,
+        Descripcion: req.body.Descripcion,
+        Valoraciones: req.body.Valoraciones,
+        Generos: req.body.Generos,
+        NumeroReproducciones: req.body.NumeroReproducciones,
+        Premios: req.body.Premios,
+        Pelicula: req.body.Pelicula,
+        Serie: req.body.Serie
     });
-}
+
+    // Guardar el nuevo contenido en la base de datos
+    contenidos.save()
+        .then(function(savedContenido) {
+            res.status(201).json({
+                message: "Nuevo contenido añadido",
+                data: savedContenido
+            });
+        })
+        .catch(function(err) {
+            // Manejar errores de validación o de base de datos
+            let errorMessage = "Error al añadir nuevo contenido";
+            if (err.errors) {
+                // Si hay errores de validación, construir un mensaje de error más específico
+                let validationErrors = [];
+                for (let key in err.errors) {
+                    if (err.errors.hasOwnProperty(key)) {
+                        validationErrors.push({
+                            field: key,
+                            message: err.errors[key].message
+                        });
+                    }
+                }
+                errorMessage = "Errores de validación: " + JSON.stringify(validationErrors);
+            } else {
+                // Otro tipo de error de base de datos
+                console.error("Error al guardar contenido:", err);
+            }
+            res.status(500).json({
+                message: errorMessage,
+                error: err
+            });
+        });
+};
+
 
 //FIND DE TODO
 exports.view = function(req,res) //una find, un get para solo ids, para tener dato de referencia para las consultas en la bbdd 
