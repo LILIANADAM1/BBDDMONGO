@@ -1,47 +1,5 @@
-// contenidosController.js
-
-const Contenidos = require('./contenidosModel');
-
-// INSERTS
-exports.new = async function(req, res) {
-    try {
-        const { Titulo, TipoContenido, Descripcion, Valoraciones, Generos, NumeroReproducciones, Premios, Pelicula, Serie } = req.body;
-
-        // Verificar si los campos requeridos están presentes
-        if (!Titulo || !TipoContenido) {
-            return res.status(400).json({
-                message: "Los campos 'Titulo' y 'TipoContenido' son obligatorios."
-            });
-        }
-
-        // Crear una nueva instancia de Contenidos
-        const nuevoContenido = new Contenidos({
-            Titulo,
-            TipoContenido,
-            Descripcion,
-            Valoraciones,
-            Generos,
-            NumeroReproducciones,
-            Premios,
-            Pelicula,
-            Serie
-        });
-
-        // Guardar el contenido en la base de datos
-        const contenidoGuardado = await nuevoContenido.save();
-
-        res.status(201).json({
-            message: "Nuevo contenido añadido correctamente.",
-            data: contenidoGuardado
-        });
-    } catch (error) {
-        console.error("Error al guardar el contenido:", error);
-        res.status(500).json({
-            message: "Error al guardar el contenido.",
-            error: error.message
-        });
-    }
-};
+//contenidosController js
+Contenidos = require('./contenidosModel')
 
 //Handle index
 
