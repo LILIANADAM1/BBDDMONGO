@@ -8,10 +8,9 @@ const contentSchema = new mongoose.Schema({
   genres: [{ type: String }],
   views: { type: Number, default: 0 },
   awards: [{ type: String }],
-  // Propiedades específicas para películas
-  duration: { type: Number }, // Duración en minutos
+  duration: { type: Number }, 
   director: { type: String },
-  // Propiedades específicas para series
+  
   seasons: [{
     title: { type: String },
     episodes: [{
