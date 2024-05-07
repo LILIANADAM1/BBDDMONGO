@@ -30,9 +30,8 @@ router.route('/contenidos/findbyid/:contenidos_id')
 router.route('/series')
     .get(contenidosController.getAllSeries); //127.0.1:8080/api/series
 // Rutas para la entidad "Peliculas"
-router.route('/')
+router.route('/peliculas')
     .get(contenidosController.getAllPeliculas); // Obtener todas las películas
-
 router.get('/genero/:genero', contenidosController.getContenidosByGenero);//127.0.0.1:8080/api/genero/crimen o cualquiera de los generos que este dentro del array generos. 
 router.get('/top10', contenidosController.getContenidosTop10);//127.0.0.1:8080/api/top10
 
