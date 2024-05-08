@@ -1,7 +1,6 @@
 //contenidosController js
 Contenidos = require('./contenidosModel')
 
-//Handle index
 
 exports.index = function(req,res)
 {
@@ -22,9 +21,8 @@ exports.index = function(req,res)
     });
 }
 
-// INSERTS
+
 exports.new = function (req, res) {
-    // Crear una nueva instancia de Contenidos con los datos del cuerpo de la solicitud
     var contenidos = new Contenidos({
         Titulo: req.body.Titulo,
         TipoContenido: req.body.TipoContenido,
@@ -37,7 +35,6 @@ exports.new = function (req, res) {
         Serie: req.body.Serie
     });
 
-    // Guardar el nuevo contenido en la base de datos
     contenidos.save()
         .then(function(savedContenido) {
             res.status(201).json({
@@ -46,10 +43,8 @@ exports.new = function (req, res) {
             });
         })
         .catch(function(err) {
-            // Manejar errores de validación o de base de datos
             let errorMessage = "Error al añadir nuevo contenido";
             if (err.errors) {
-                // Si hay errores de validación, construir un mensaje de error más específico
                 let validationErrors = [];
                 for (let key in err.errors) {
                     if (err.errors.hasOwnProperty(key)) {
@@ -61,7 +56,6 @@ exports.new = function (req, res) {
                 }
                 errorMessage = "Errores de validación: " + JSON.stringify(validationErrors);
             } else {
-                // Otro tipo de error de base de datos
                 console.error("Error al guardar contenido:", err);
             }
             res.status(500).json({
@@ -72,8 +66,7 @@ exports.new = function (req, res) {
 };
 
 
-//FIND DE TODO
-exports.view = function(req,res) //una find, un get para solo ids, para tener dato de referencia para las consultas en la bbdd 
+exports.view = function(req,res) 
 {
     Contenidos.findById(req.params.contenidos_id).then(function(contenidos)
     {
@@ -84,7 +77,6 @@ exports.view = function(req,res) //una find, un get para solo ids, para tener da
     });
 }
 
-//FIND DE TODAS LAS SERIES 
 exports.getAllSeries = function(req, res) {
     Contenidos.find({ TipoContenido: "serie" }).then(function(series) {
         res.json({
@@ -99,9 +91,7 @@ exports.getAllSeries = function(req, res) {
     });
 };
 
-//FIND DE TODAS LAS PELICULAS 
 exports.getAllPeliculas = function(req, res) {
-    //console.log("Hey pavo");
     Contenidos.find({ TipoContenido: "película" }).then(function(peliculas) {
         res.json({
             message: "Peliculas retrieved correctly",
@@ -115,7 +105,6 @@ exports.getAllPeliculas = function(req, res) {
     });
 };
 
-//FIND DE PELICULAS Y SERIES POR GENERO 
 exports.getContenidosByGenero = function(req, res) {
     var genero = req.params.genero;
     Contenidos.find({ 
@@ -134,7 +123,6 @@ exports.getContenidosByGenero = function(req, res) {
     });
 };
 
-//FIND TOP 10 
 exports.getContenidosTop10 = function(req, res) {
     Contenidos.aggregate([
         { $match: { TipoContenido: { $in: ["serie", "pelicula"] } } },
@@ -161,7 +149,7 @@ exports.getContenidosTop10 = function(req, res) {
 };
 
 
-//DELETE
+
 exports.delete = function(req,res)
 {
     Contenidos.deleteOne({_id:req.params.contenidos_id}).then(function(contenidos)
@@ -173,7 +161,7 @@ exports.delete = function(req,res)
     });
 }
 
-// UPDATES
+
 exports.update = function (req, res) {
     Contenidos.findById(req.params.contenidos_id).then(function (contenidos) {
         if (!contenidos) {

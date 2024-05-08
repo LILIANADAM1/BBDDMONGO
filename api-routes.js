@@ -16,24 +16,22 @@ router.get('/', function(req,res)
 
 var contenidosController = require('./contenidosController')
 router.route('/contenidos')
-    .get(contenidosController.index)//127.0.0.1:8080/api/contenidos/
-    .post(contenidosController.new)//127.0.0.1:8080/api/contenidos/
+    .get(contenidosController.index)
+    .post(contenidosController.new)
 
 router.route('/contenidos/findbyid/:contenidos_id')
-    .get(contenidosController.view)//127.0.1:8080/api/contenidos/findbyid/661fbaa383efb6caaf80e69b
-    .delete(contenidosController.delete)//127.0.1:8080/api/contenidos/findbyid/661520292eef8cfa6bf6ee5a
-    .put(contenidosController.update)//127.0.0.1:8080/api/contenidos/findbyid/6633438db700538afa2202da
-    //aqui igual el fin de las series.
+    .get(contenidosController.view)
+    .delete(contenidosController.delete)
+    .put(contenidosController.update)
 
-//Rutas adicionales para filtrar contenidos
-// Rutas para la entidad "Series"
+
 router.route('/series')
-    .get(contenidosController.getAllSeries); //127.0.1:8080/api/series
-// Rutas para la entidad "Peliculas"
-router.route('/peliculas')
-    .get(contenidosController.getAllPeliculas); // Obtener todas las películas
-router.get('/genero/:genero', contenidosController.getContenidosByGenero);//127.0.0.1:8080/api/genero/crimen o cualquiera de los generos que este dentro del array generos. 
-router.get('/top10', contenidosController.getContenidosTop10);//127.0.0.1:8080/api/top10
+    .get(contenidosController.getAllSeries); 
 
-//esto es para que se guarden entre rutas
+router.route('/peliculas')
+    .get(contenidosController.getAllPeliculas); 
+router.get('/genero/:genero', contenidosController.getContenidosByGenero);
+router.get('/top10', contenidosController.getContenidosTop10);
+
+
 module.exports = router;
