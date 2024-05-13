@@ -34,4 +34,4 @@ router.get('/genero/:genero', contenidosController.getContenidosByGenero);
 router.get('/top10', contenidosController.getContenidosTop10);
 
 
-module.exports = router;
+//module.exports = router;
