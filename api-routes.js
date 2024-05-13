@@ -30,6 +30,7 @@ router.route('/series')
 
 router.route('/peliculas')
     .get(contenidosController.getAllPeliculas); 
+    
 router.get('/genero/:genero', contenidosController.getContenidosByGenero);
 router.get('/top10', contenidosController.getContenidosTop10);
 

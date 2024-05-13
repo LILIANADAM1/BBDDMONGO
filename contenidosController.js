@@ -92,18 +92,19 @@ exports.getAllSeries = function(req, res) {
 };
 
 exports.getAllPeliculas = function(req, res) {
-    Contenidos.find({ TipoContenido: "película" }).then(function(peliculas) {
+    Contenidos.find({ TipoContenido: "pelicula" }).then(function(peliculas) {
         res.json({
             message: "Peliculas retrieved correctly",
             data: peliculas
         });
     }).catch(function(err) {
         res.status(500).json({
-            message: "Error retrieving Pelicula",
+            message: "Error retrieving Peliculas",
             error: err
         });
     });
 };
+
 
 exports.getContenidosByGenero = function(req, res) {
     var genero = req.params.genero;
