@@ -14,7 +14,12 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json())
 
 mongoose.connect('mongodb://localhost/NetAlmix', {useNewUrlParser: true, useUnifiedTopology: true}) 
-
+.then(() => {
+    console.log('DB connected successfully');
+  })
+  .catch(err => {
+    console.error('Error connecting to database:', err);
+  });
 var db = mongoose.connection;
 if(!db)
 {
